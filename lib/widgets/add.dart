@@ -27,13 +27,17 @@ class AddPage extends StatelessWidget {
                 var newItem = {
                   "name": nameEditingController.text,
                   "desc": descriptionEditingController.text,
-                  "place": placeEditingController.text
+                  "place": placeEditingController.text,
+                  "completed": false
                 };
+
+                //Step 2. passed the item as the 2nd argument of Navigator.pop()
+                //Return to Home page
+                Navigator.pop(context, newItem);
               }
               else {
                 print("Later put toast/alert dialog to remind user to put all their info in there");
               }
-              Navigator.pop(context);
             }, child: Text("Add new item"))
           ],
         ),
