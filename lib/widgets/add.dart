@@ -28,7 +28,7 @@ class AddPage extends StatelessWidget {
                   "name": nameEditingController.text,
                   "desc": descriptionEditingController.text,
                   "place": placeEditingController.text
-                }
+                };
               }
               else {
                 print("Later put toast/alert dialog to remind user to put all their info in there");
