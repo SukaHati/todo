@@ -19,9 +19,20 @@ class AddPage extends StatelessWidget {
             TextField(decoration: InputDecoration(hintText: "Enter item description"), controller: descriptionEditingController,),
             TextField(decoration: InputDecoration(hintText: "Enter item place"), controller: placeEditingController,),
             TextButton(onPressed: (){
-              print(nameEditingController.text);
-              print(descriptionEditingController.text);
-              print(placeEditingController.text);
+              if(nameEditingController.text != "" && descriptionEditingController.text != "" && placeEditingController.text != "") {
+                print(nameEditingController.text);
+                print(descriptionEditingController.text);
+                print(placeEditingController.text);
+
+                var newItem = {
+                  "name": nameEditingController.text,
+                  "desc": descriptionEditingController.text,
+                  "place": placeEditingController.text
+                }
+              }
+              else {
+                print("Later put toast/alert dialog to remind user to put all their info in there");
+              }
               Navigator.pop(context);
             }, child: Text("Add new item"))
           ],
