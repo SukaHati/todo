@@ -82,12 +82,20 @@ class _HomePageState extends State<HomePage> {
                 onTap: () async {
                   //Pass forward data
                   var action;
-                  if(_todoItems[index]["completed"] == false) {
-                    action = await Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todoItem: _todoItems[index], index: index)));
+                  String completionText = "";
+                  if(_todoItems[index]["completed"]) {
+                    completionText = "Unmarked as completed";
                   }
                   else {
-                    action = await Navigator.push(context, MaterialPageRoute(builder: (context) => AltDetailPage(todoItem: _todoItems[index], index: index)));
+                    completionText = "Marked as completed";
                   }
+                  //if(_todoItems[index]["completed"] == false) {
+                    action = await Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todoItem: _todoItems[index], index: index, completionText: completionText)));
+                    //Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage()));
+                  //}
+                  //else {
+                  //  action = await Navigator.push(context, MaterialPageRoute(builder: (context) => AltDetailPage(todoItem: _todoItems[index], index: index)));
+                  //}
                   if(action != null) {
                     if(action["action"] == "delete") {
                       _todoItems.removeAt(action["index"]);
