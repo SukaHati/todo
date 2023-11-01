@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:todo/widgets/detail.dart';
 import 'package:todo/widgets/detail2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'add.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   //List<Map<String, dynamic>>
-  List<Map<String, dynamic>> _todoItems = [
+  List<dynamic> _todoItems = [
     {
       "name":"Learn ListView",
       "place":"Zoom Link",
@@ -38,6 +41,33 @@ class _HomePageState extends State<HomePage> {
       "completed": false
     }
   ];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //When the page is loading, we call the function loadData()
+    loadData();
+  }
+  //When the page is loading, do the following
+  void loadData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var todoString = prefs.getString("todos");
+    if(todoString != null) {
+      setState(() {
+        //Since we retrieved data in String, we use jsonDecode() to transform String into List or Map
+        _todoItems = jsonDecode(todoString);
+      });
+    }
+  }
+
+  void saveData() async {
+    //get the file manager
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Shared preferences only save String int double or boolean or List of String
+    //We use jsonEncode to transform List or Map into String and use that setString to saving
+    //Name file is "todos"
+    prefs.setString("todos", jsonEncode(_todoItems));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +82,7 @@ class _HomePageState extends State<HomePage> {
             //Step 3: Process the retrieved item
             if(newItem != null) {
               _todoItems.add(newItem);
+              saveData();
               setState(() {
                 _todoItems;
               });
@@ -99,18 +130,21 @@ class _HomePageState extends State<HomePage> {
                   if(action != null) {
                     if(action["action"] == "delete") {
                       _todoItems.removeAt(action["index"]);
+                      saveData();
                       setState(() {
                         _todoItems;
                       });
                     }
-                    else if(action["action"] == "unmarked") {
-                      _todoItems[index]["completed"] = false;
-                      setState(() {
-                        _todoItems;
-                      });
-                    }
+                    //else if(action["action"] == "unmarked") {
+                    //  _todoItems[index]["completed"] = false;
+                    //  saveData();
+                    //  setState(() {
+                    //    _todoItems;
+                    //  });
+                    //}
                     else {
-                      _todoItems[index]["completed"] = true;
+                      _todoItems[index]["completed"] = !_todoItems[index]["completed"];
+                      saveData();
                       setState(() {
                         _todoItems;
                       });

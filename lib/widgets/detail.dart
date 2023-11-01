@@ -32,9 +32,9 @@ class DetailPage extends StatelessWidget {
                     "index": index,
                     "action": "marked"
                   };
-                  if(todoItem["completed"]) {
-                    item["action"] = "unmarked";
-                  }
+                  //if(todoItem["completed"]) {
+                  //  item["action"] = "unmarked";
+                  //}
                   Navigator.pop(context, item);
                 }, child: Text(completionText)),
                 ElevatedButton(onPressed: (){
