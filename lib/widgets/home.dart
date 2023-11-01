@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/widgets/detail.dart';
+import 'package:todo/widgets/detail2.dart';
 import 'add.dart';
 
 class HomePage extends StatefulWidget {
@@ -80,10 +81,22 @@ class _HomePageState extends State<HomePage> {
                 trailing: Icon(Icons.chevron_right),
                 onTap: () async {
                   //Pass forward data
-                  var action = await Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todoItem: _todoItems[index], index: index)));
+                  var action;
+                  if(_todoItems[index]["completed"] == false) {
+                    action = await Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(todoItem: _todoItems[index], index: index)));
+                  }
+                  else {
+                    action = await Navigator.push(context, MaterialPageRoute(builder: (context) => AltDetailPage(todoItem: _todoItems[index], index: index)));
+                  }
                   if(action != null) {
                     if(action["action"] == "delete") {
                       _todoItems.removeAt(action["index"]);
+                      setState(() {
+                        _todoItems;
+                      });
+                    }
+                    else if(action["action"] == "unmarked") {
+                      _todoItems[index]["completed"] = false;
                       setState(() {
                         _todoItems;
                       });
